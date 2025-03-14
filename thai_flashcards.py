@@ -1,123 +1,106 @@
-Python 3.13.1 (v3.13.1:06714517797, Dec  3 2024, 14:00:22) [Clang 15.0.0 (clang-1500.3.9.4)] on darwin
-Type "help", "copyright", "credits" or "license()" for more information.
 import tkinter as tk
 import random
+from tkinter import messagebox
 
-# Thai consonants and their names
+# List of Thai consonants and their names
 consonants = [
-    ("ก", "gor gai"),
+    ("ก", "gor kai"),
     ("ข", "khor khai"),
-    ("ค", "khor khwai"),
-    ("ง", "ngor ngu"),
+    ("ฃ", "khor khwua"),
+    ("ค", "khor khai"),
+    ("ฅ", "khor khon"),
+    ("ฆ", "khor raakhang"),
+    ("ง", "ngor ngoo"),
     ("จ", "jor jaan"),
     ("ฉ", "chor ching"),
     ("ช", "chor chang"),
-    ("ซ", "sor so"),
+    ("ซ", "sor soo"),
+    ("ฌ", "chor chaa"),
     ("ญ", "yor ying"),
-    ("ฎ", "dor cha-da"),
+    ("ฎ", "dor chaada"),
+    ("ฏ", "tor paak"),
+    ("ฐ", "thor than"),
+    ("ฑ", "thor phuuthao"),
+    ("ฒ", "thor moohok"),
+    ("ณ", "nor naan"),
+    ("ด", "dor dek"),
+    ("ต", "tor tao"),
+    ("ถ", "thor thong"),
+    ("ท", "thor thahaan"),
+    ("ธ", "thor tham"),
+    ("น", "nor nooa"),
+    ("บ", "bor bai mai"),
+    ("ป", "por plaa"),
+    ("ผ", "phor phuung"),
+    ("ฝ", "for faa"),
+    ("พ", "phor phaa"),
+    ("ฟ", "for fang"),
+    ("ภ", "phor samphao"),
+    ("ม", "mor maa"),
+    ("ย", "yor yak"),
+    ("ร", "ror ruu"),
+    ("ล", "lor ling"),
+    ("ว", "wor waaen"),
+    ("ศ", "sor saket"),
+    ("ษ", "sor ruek"),
+    ("ส", "sor sua"),
+    ("ห", "hor heep"),
+    ("ฬ", "lor juul"),
+    ("อ", "or ang"),
+    ("ฮ", "hor nokhak")
 ]
 
-class FlashcardApp:
-    def __init__(self, root):
-        self.root = root
-        self.root.title("Thai Consonant Flashcards")
+# Initialize the window
+root = tk.Tk()
+root.title("Thai Consonant Flashcards")
 
-        self.card_frame = tk.Frame(root, width=300, height=200, bg="white")
-        self.card_frame.pack_propagate(False)
-        self.card_frame.pack(pady=20)
+# Set window size
+root.geometry("400x300")
 
-        self.consonant_label = tk.Label(self.card_frame, text="", font=("Arial", 80), bg="white")
-        self.consonant_label.pack(expand=True)
+# Create a label to show the card content
+card_label = tk.Label(root, text="", font=("Arial", 40), width=10, height=5, relief="solid")
+card_label.pack(pady=50)
 
-        self.flip_button = tk.Button(root, text="Flip Card", command=self.flip_card)
-        self.flip_button.pack(pady=10)
+# Function to flip the card
+def flip_card():
+    global show_name
+    if show_name:
+        card_label.config(text=consonant_name)
+    else:
+        card_label.config(text=consonant)
+    show_name = not show_name
 
-        self.next_button = tk.Button(root, text="Next Card", command=self.next_card)
-        self.next_button.pack(pady=10)
+# Function to show a new consonant
+def new_card():
+    global consonant, consonant_name, show_name
+    consonant, consonant_name = random.choice(consonants)
+    show_name = False
+    card_label.config(text=consonant)
 
-        self.current_consonant = None
-        self.show_consonant()
+# Function to save the current card to a file
+def save_card():
+    global consonant, consonant_name, show_name
+    card_to_save = consonant_name if show_name else consonant
+    try:
+        with open("flashcard.txt", "a", encoding="utf-8") as file:
+            file.write(f"{card_to_save}\n")
+        messagebox.showinfo("Success", f"Card '{card_to_save}' saved successfully!")
+    except Exception as e:
+        messagebox.showerror("Error", f"An error occurred: {e}")
 
-    def show_consonant(self):
-        self.current_consonant = random.choice(consonants)
-        self.consonant_label.config(text=self.current_consonant[0])
+# Initial state
+show_name = False
+new_card()
 
-    def flip_card(self):
-        if self.consonant_label.cget("text") == self.current_consonant[0]:
-            self.consonant_label.config(text=self.current_consonant[1])
-        else:
-            self.consonant_label.config(text=self.current_consonant[0])
+# Buttons to flip the card, show a new one, and save the card
+flip_button = tk.Button(root, text="Flip", font=("Arial", 14), command=flip_card)
+flip_button.pack(side=tk.LEFT, padx=20)
 
-    def next_card(self):
-        self.show_consonant()
+new_button = tk.Button(root, text="New Card", font=("Arial", 14), command=new_card)
+new_button.pack(side=tk.RIGHT, padx=20)
 
-if __name__ == "__main__":
-    root = tk.Tk()
-    app = FlashcardApp(root)
-    root.mainloop()
+save_button = tk.Button(root, text="Save", font=("Arial", 14), command=save_card)
+save_button.pack(side=tk.BOTTOM, pady=20)
 
-SyntaxError: multiple statements found while compiling a single statement
-import tkinter as tk
-import random
-
-# Thai consonants and their names
-consonants = [
-    ("ก", "gor gai"),
-    ("ข", "khor khai"),
-    ("ค", "khor khwai"),
-    ("ง", "ngor ngu"),
-    ("จ", "jor jaan"),
-    ("ฉ", "chor ching"),
-    ("ช", "chor chang"),
-    ("ซ", "sor so"),
-    ("ญ", "yor ying"),
-    ("ฎ", "dor cha-da"),
-]
-
-class FlashcardApp:
-    def __init__(self, root):
-        self.root = root
-        self.root.title("Thai Consonant Flashcards")
-
-        self.card_frame = tk.Frame(root, width=300, height=200, bg="white")
-        self.card_frame.pack_propagate(False)
-        self.card_frame.pack(pady=20)
-
-        self.consonant_label = tk.Label(self.card_frame, text="", font=("Arial", 80), bg="white")
-...         self.consonant_label.pack(expand=True)
-... 
-...         self.flip_button = tk.Button(root, text="Flip Card", command=self.flip_card)
-...         self.flip_button.pack(pady=10)
-... 
-...         self.next_button = tk.Button(root, text="Next Card", command=self.next_card)
-...         self.next_button.pack(pady=10)
-... 
-...         self.current_consonant = None
-...         self.show_consonant()
-... 
-...     def show_consonant(self):
-...         self.current_consonant = random.choice(consonants)
-...         self.consonant_label.config(text=self.current_consonant[0])
-... 
-...     def flip_card(self):
-...         if self.consonant_label.cget("text") == self.current_consonant[0]:
-...             self.consonant_label.config(text=self.current_consonant[1])
-...         else:
-...             self.consonant_label.config(text=self.current_consonant[0])
-... 
-...     def next_card(self):
-...         self.show_consonant()
-... 
-... if __name__ == "__main__":
-...     root = tk.Tk()
-...     app = FlashcardApp(root)
-...     root.mainloop()
-... 
-SyntaxError: multiple statements found while compiling a single statement
->>> 
->>> python thai_flashcards.py
-... 
-SyntaxError: invalid syntax
->>> python thai_flashcards.py
-... 
-SyntaxError: invalid syntax
+# Run the Tkinter main loop
+root.mainloop()
